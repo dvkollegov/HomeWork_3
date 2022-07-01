@@ -24,4 +24,9 @@ public class FinancialRecord {
     public void setOutcomes(int outcomes) {
         this.outcomes = outcomes;
     }
+
+    @Override
+    public String toString() {
+        return this.incomes + ":" + this.outcomes;
+    }
 }

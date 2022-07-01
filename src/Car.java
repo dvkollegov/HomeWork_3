@@ -1,4 +1,4 @@
-public abstract class Car extends CarFactory {
+public abstract class Car {
 
     public void moving () {
 

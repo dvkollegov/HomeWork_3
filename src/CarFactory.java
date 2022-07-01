@@ -1,11 +1,11 @@
 public class CarFactory {
 
-    public static void makeLada() {
-        System.out.println("Cоздать жигули");
+    public static Lada makeLada() {
+        return new Lada();
     }
 
-    public static void makeToyota() {
-        System.out.println("Cоздать toyota");
+    public static Toyota makeToyota() {
+        return new Toyota();
     }
 
 }

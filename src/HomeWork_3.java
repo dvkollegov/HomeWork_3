@@ -1,5 +1,9 @@
 import java.io.*;
+import java.lang.reflect.Array;
+import java.sql.SQLOutput;
+import java.util.Arrays;
 import java.util.Random;
+
 
 public class HomeWork_3 {
     public static void main(String[] args) throws IOException {
@@ -49,7 +53,7 @@ public class HomeWork_3 {
         FinancialRecord financialRecord = new FinancialRecord(500, 300);
         FileWriter fileWriter = new FileWriter("C:\\MyProgram\\JavaAblazzing\\HomeWork_3\\HomeWork_3\\resource\\report.txt", false);
         fileWriter.write("доходы = " + financialRecord.getIncomes() + ", расходы = " + financialRecord.getOutcomes() + " \n");
-        //fileWriter.close();
+        fileWriter.close();
 
         //Продвинутый уровень
         //Задача №1
@@ -59,56 +63,22 @@ public class HomeWork_3 {
         // 3. Пройтись по массиву, проверить к какому классу принадлежит машина, привести тип к классу машины
         // и вызвать характерные для нее методы.
 
-        CarFactory lada1 = new Lada();
-        CarFactory lada2 = new Lada();
-        CarFactory lada3 = new Lada();
-        CarFactory lada4 = new Lada();
-        CarFactory lada5 = new Lada();
-        CarFactory lada6 = new Lada();
-        CarFactory lada7 = new Lada();
-        CarFactory lada8 = new Lada();
-        CarFactory lada9 = new Lada();
-        CarFactory lada10 = new Lada();
-        CarFactory lada11 = new Lada();
-        CarFactory lada12 = new Lada();
-        CarFactory lada13 = new Lada();
-        CarFactory lada14 = new Lada();
-        CarFactory lada15 = new Lada();
-        CarFactory lada16 = new Lada();
-        CarFactory lada17 = new Lada();
-        CarFactory lada18 = new Lada();
-        CarFactory lada19 = new Lada();
-        CarFactory lada20 = new Lada();
+        Car[] cars = new Car[40];
+        for (int i = 0; i < 40; i++) {
+            if (i%2 == 0) {
+                cars[i] = CarFactory.makeLada();
+            } else {
+                Toyota toyota1 = CarFactory.makeToyota();
+                cars[i] = toyota1;
+            }
+        }
 
-        CarFactory toyota1 = new Toyota();
-        CarFactory toyota2 = new Toyota();
-        CarFactory toyota3 = new Toyota();
-        CarFactory toyota4 = new Toyota();
-        CarFactory toyota5 = new Toyota();
-        CarFactory toyota6 = new Toyota();
-        CarFactory toyota7 = new Toyota();
-        CarFactory toyota8 = new Toyota();
-        CarFactory toyota9 = new Toyota();
-        CarFactory toyota10 = new Toyota();
-        CarFactory toyota11 = new Toyota();
-        CarFactory toyota12 = new Toyota();
-        CarFactory toyota13 = new Toyota();
-        CarFactory toyota14 = new Toyota();
-        CarFactory toyota15 = new Toyota();
-        CarFactory toyota16 = new Toyota();
-        CarFactory toyota17 = new Toyota();
-        CarFactory toyota18 = new Toyota();
-        CarFactory toyota19 = new Toyota();
-        CarFactory toyota20 = new Toyota();
-
-        CarFactory[] carFactorys = {lada1, lada2, lada3, lada4, lada5, lada6, lada7, lada8, lada9, lada10, lada11, lada12, lada13, lada14, lada15, lada16, lada17, lada18, lada19, lada20, toyota1, toyota2, toyota3, toyota4, toyota5, toyota6, toyota7, toyota8, toyota9, toyota10, toyota11, toyota12, toyota13, toyota14, toyota15, toyota16, toyota17, toyota18, toyota19, toyota20};
-        for (CarFactory carFactory : carFactorys) {
-            if (carFactory instanceof Lada) {
-                Lada myLada = (Lada) carFactory;
-                myLada.breakdown();
-            } else if (carFactory instanceof Toyota) {
-                Toyota myToyota = (Toyota) carFactory;
-                myToyota.onMusic();
+        for (Car car : cars) {
+            if (car instanceof Lada) {
+                ((Lada) car).breakdown();
+            } else if (car instanceof Toyota) {
+                Toyota toyota1 = (Toyota) car;
+                toyota1.onMusic();
             }
         }
 
@@ -120,53 +90,37 @@ public class HomeWork_3 {
         // 5. Прочитать файл report.txt, просуммировать все доходы и вывести на экран, тоже самое с расходами
         // Ожидаемый результат: общие доходы - (какое то число), общие расходы - (какое то число)
 
-        //создал 10 отчет Доходы-Расходы
-        financialRecord.setIncomes(new Random().nextInt(1000));
-        financialRecord.setOutcomes(new Random().nextInt(500));
-        fileWriter.write("доходы = " + financialRecord.getIncomes() + ", расходы = " + financialRecord.getOutcomes() + " \n");
+        FinancialRecord[] financialRecords = new FinancialRecord[10];
+        Random random = new Random(1);
+        for (int i = 0; i < financialRecords.length; i++) {
+            int i1 = random.nextInt(10_000);
+            int i2 = random.nextInt(10_000);
+            financialRecords[i] = new FinancialRecord(i1, i2);
+        }
+        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("C:\\MyProgram\\JavaAblazzing\\HomeWork_3\\HomeWork_3\\resource\\report_1.txt"));
+        String result = "";
+        for (FinancialRecord record : financialRecords) {
+            result += record.toString() + "\n";
+        }
+        result = result.substring(0, result.length() - 1);
+        bufferedWriter.write(result);
+        bufferedWriter.close();
 
-        financialRecord.setIncomes(new Random().nextInt(1000));
-        financialRecord.setOutcomes(new Random().nextInt(500));
-        fileWriter.write("доходы = " + financialRecord.getIncomes() + ", расходы = " + financialRecord.getOutcomes() + " \n");
+        BufferedReader bufferedReader1 = new BufferedReader(new FileReader("C:\\MyProgram\\JavaAblazzing\\HomeWork_3\\HomeWork_3\\resource\\report_1.txt"));
+        int totalIncome = 0;
+        int totalOutcome = 0;
+        while (bufferedReader1.ready()) {
+            String line = bufferedReader1.readLine();
+            String[] strings = line.split(":");
+            int income = Integer.parseInt(strings[0]);
+            int outcome = Integer.parseInt(strings[1]);
+            totalIncome += income;
+            totalOutcome += outcome;
+        }
+        System.out.println("Общие доходы - " + totalIncome + ", общие расходы - " + totalOutcome);
+        bufferedReader1.close();
 
-        financialRecord.setIncomes(new Random().nextInt(1000));
-        financialRecord.setOutcomes(new Random().nextInt(500));
-        fileWriter.write("доходы = " + financialRecord.getIncomes() + ", расходы = " + financialRecord.getOutcomes() + " \n");
 
-        financialRecord.setIncomes(new Random().nextInt(1000));
-        financialRecord.setOutcomes(new Random().nextInt(500));
-        fileWriter.write("доходы = " + financialRecord.getIncomes() + ", расходы = " + financialRecord.getOutcomes() + " \n");
-
-        financialRecord.setIncomes(new Random().nextInt(1000));
-        financialRecord.setOutcomes(new Random().nextInt(500));
-        fileWriter.write("доходы = " + financialRecord.getIncomes() + ", расходы = " + financialRecord.getOutcomes() + " \n");
-
-        financialRecord.setIncomes(new Random().nextInt(1000));
-        financialRecord.setOutcomes(new Random().nextInt(500));
-        fileWriter.write("доходы = " + financialRecord.getIncomes() + ", расходы = " + financialRecord.getOutcomes() + " \n");
-
-        financialRecord.setIncomes(new Random().nextInt(1000));
-        financialRecord.setOutcomes(new Random().nextInt(500));
-        fileWriter.write("доходы = " + financialRecord.getIncomes() + ", расходы = " + financialRecord.getOutcomes() + " \n");
-
-        financialRecord.setIncomes(new Random().nextInt(1000));
-        financialRecord.setOutcomes(new Random().nextInt(500));
-        fileWriter.write("доходы = " + financialRecord.getIncomes() + ", расходы = " + financialRecord.getOutcomes() + " \n");
-
-        financialRecord.setIncomes(new Random().nextInt(1000));
-        financialRecord.setOutcomes(new Random().nextInt(500));
-        fileWriter.write("доходы = " + financialRecord.getIncomes() + ", расходы = " + financialRecord.getOutcomes() + " \n");
-
-        financialRecord.setIncomes(new Random().nextInt(1000));
-        financialRecord.setOutcomes(new Random().nextInt(500));
-        fileWriter.write("доходы = " + financialRecord.getIncomes() + ", расходы = " + financialRecord.getOutcomes() + " \n");
-        fileWriter.close();
-
-//        BufferedReader bufferedReader1 = new BufferedReader(new FileReader("C:\\MyProgram\\JavaAblazzing\\HomeWork_3\\HomeWork_3\\resource\\report.txt"));
-//        while (bufferedReader1.ready()) {
-//            String row = bufferedReader1.readLine();
-//            System.out.println(Integer.parseInt(row));
-//        }
 
 
 
